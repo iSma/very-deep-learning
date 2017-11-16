@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ $# -ne 1 ]
+then
+    echo "Usage: $(basename $0) DESTINATION_DIRECTORY"
+    exit 1
+fi
+
+DEST=$(readlink -f $1)
+echo "Downloading binary dataset to $DEST..."
+mkdir -p "$DEST"
+gsutil -m cp -r gs://quickdraw_dataset/full/binary "$DEST"

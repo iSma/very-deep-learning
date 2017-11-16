@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_PATH=$(readlink -f $(dirname "${BASH_SOURCE[0]}")/..)
+
+if [ $# -ne 1 ]
+then
+    echo "Usage: $(basename $0) DATA_DIRECTORY"
+    exit 1
+fi
+
+DEST=$(readlink -f $1)
+echo "Building index file for $DEST..."
+PYTHONPATH="${PROJECT_PATH}:${PYTHONPATH:-}" python3 -m deepdraw.data.index "$DEST"
