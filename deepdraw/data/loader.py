@@ -41,6 +41,43 @@ class BaseDataset(Dataset):
         # return new instance of same class
         return type(self)(self.path, index)
 
+    def split(self, sizes):
+        """Splits the dataset into subsets of relative size given by `sizes`.
+
+        Can be used to split into test/train/validation sets.
+
+        Example:
+            dataset.split([0.75, 0.15, 0.1]) splits the dataset into 3 parts,
+            the first containing 75% of the drawings, the second 15% and the
+            third 10%.
+            Sizes are normalized to sum up to 1, so [0.75, 0.15, 0.1],
+            [75, 15, 10] or [15, 3, 2] are all equivalent.
+
+        Args:
+            sizes (list of float): sizes of the splits
+
+        Returns:
+            list of list of int: A list containing one list of indices for each
+                element of `sizes`. Can be used with `SubsetRandomSampler`.
+
+        """
+        sizes = np.array(sizes) / np.sum(sizes)
+        sizes = np.cumsum(sizes)
+        print(sizes)
+
+        indices = self.index.groupby('word').indices
+        res = [[] for _ in sizes]
+
+        for word in sorted(self.index.word.unique()):
+            i = indices[word]
+            s = [int(round(s * len(i))) for s in sizes]
+            s = np.split(i, s)[:-1]
+
+            for r, s in zip(res, s):
+                r += list(s)
+
+        return res
+
     def __len__(self):
         return len(self.index)
 
