@@ -1,4 +1,5 @@
 import numpy as np
+import PIL
 
 
 class Sequencer(object):
@@ -66,7 +67,7 @@ class Rasterizer(object):
         Args:
             drawing (dict): drawing to be rasterized
         Returns:
-            numpy.ndarray: a 256x256 boolean numpy array
+            PIL.Image: a 256x256 grayscale image
         """
 
         drawing = drawing['drawing']
@@ -119,4 +120,6 @@ class Rasterizer(object):
                 image[x, y] = True
 
         image = image.T  # Transpose to switch x and y axes
+        image = image.astype(np.uint8) * 255
+        image = PIL.Image.fromarray(image)
         return image
