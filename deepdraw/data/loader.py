@@ -7,9 +7,39 @@ from .unpack import load
 
 
 class BaseDataset(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, index):
         self.path = path
-        self.index = pd.read_csv(join(path, 'index.csv'))
+        self.index = index
+
+    @classmethod
+    def load(self, path):
+        index = pd.read_csv(join(path, 'index.csv'))
+        return self(path, index)
+
+    def reduce(self, n, seed=None):
+        """Reduce dataset to n drawings per class
+
+        Args:
+            n (int): number of drwaings per class
+            seed (int): random seed
+
+        Returns:
+            {Base,Stroke,Raster}Dataset: new reduced dataset
+        """
+
+        rand = np.random.RandomState(seed)
+        indices = self.index.groupby('word').indices
+        res = []
+
+        for word in sorted(self.index.word.unique()):
+            v = rand.choice(indices[word], n, replace=False)
+            res.append(v)
+
+        res = np.concatenate(res)
+        index = self.index.iloc[res]
+
+        # return new instance of same class
+        return type(self)(self.path, index)
 
     def __len__(self):
         return len(self.index)
@@ -27,8 +57,8 @@ class StrokeDataset(BaseDataset):
 
 class RasterDataset(BaseDataset):
     # TODO: add transformation
-    def __init__(self, path, center=True):
-        super().__init__(path)
+    def __init__(self, path, index, center=True):
+        super().__init__(path, index)
         self.center = center
 
     def __getitem__(self, i):
