@@ -17,22 +17,41 @@ class DrawDataset(Dataset):
         index = pd.read_csv(join(path, 'index.csv'))
         return self(path, index, transform)
 
-    def reduce(self, n, seed=None):
-        """Reduce dataset to n drawings per class
+    @property
+    def classes(self):
+        """Returns a sorted list of all words appearing in this dataset."""
+        return [*sorted(self.index.word.unique())]
+
+    def select(self, classes):
+        """Creates a new dataset containing only drawings of given classes.
 
         Args:
-            n (int): number of drwaings per class
+            classes (list of str): classes to keep
+
+        Returns:
+            DrawDataset: new reduced dataset
+        """
+        map = self.index.word.map(lambda w: w in classes)
+        index = self.index.loc[map]
+
+        return type(self)(self.path, index, self.transform)
+
+    def reduce(self, n, seed=None):
+        """Reduce dataset to `n` drawings per class
+
+        Args:
+            n (int): number of drawings per class
             seed (int): random seed
 
         Returns:
-            {Base,Stroke,Raster}Dataset: new reduced dataset
+            DrawDataset: new reduced dataset
         """
 
         rand = np.random.RandomState(seed)
         indices = self.index.groupby('word').indices
         res = []
 
-        for word in sorted(self.index.word.unique()):
+        for word in self.classes:
             v = rand.choice(indices[word], n, replace=False)
             res.append(v)
 
@@ -68,10 +87,11 @@ class DrawDataset(Dataset):
         indices = self.index.groupby('word').indices
         res = [[] for _ in sizes]
 
-        for word in sorted(self.index.word.unique()):
+        for word in self.classes:
             i = indices[word]
-            s = [int(round(s * len(i))) for s in sizes]
-            s = np.split(i, s)[:-1]
+            s = sizes[:-1] * len(i)
+            s = s.round().astype(np.int)
+            s = np.split(i, s)
 
             for r, s in zip(res, s):
                 r += list(s)
