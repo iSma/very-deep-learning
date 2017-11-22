@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from os.path import join
 from torch.utils.data import Dataset
+from sklearn.preprocessing import LabelEncoder
 
 from .unpack import load
 
@@ -9,8 +10,9 @@ from .unpack import load
 class DrawDataset(Dataset):
     def __init__(self, path, index, transform=None):
         self.path = path
-        self.index = index
+        self.index = index.reset_index(drop=True)
         self.transform = transform
+        self.classes = LabelEncoder().fit_transform(index.word)
 
     @classmethod
     def load(self, path, transform=None):
@@ -18,7 +20,7 @@ class DrawDataset(Dataset):
         return self(path, index, transform)
 
     @property
-    def classes(self):
+    def words(self):
         """Returns a sorted list of all words appearing in this dataset."""
         return [*sorted(self.index.word.unique())]
 
@@ -51,7 +53,7 @@ class DrawDataset(Dataset):
         indices = self.index.groupby('word').indices
         res = []
 
-        for word in self.classes:
+        for word in self.words:
             v = rand.choice(indices[word], n, replace=False)
             res.append(v)
 
@@ -82,12 +84,11 @@ class DrawDataset(Dataset):
         """
         sizes = np.array(sizes) / np.sum(sizes)
         sizes = np.cumsum(sizes)
-        print(sizes)
 
         indices = self.index.groupby('word').indices
         res = [[] for _ in sizes]
 
-        for word in self.classes:
+        for word in self.words:
             i = indices[word]
             s = sizes[:-1] * len(i)
             s = s.round().astype(np.int)
@@ -108,4 +109,4 @@ class DrawDataset(Dataset):
         if self.transform:
             drawing = self.transform(drawing)
 
-        return drawing, word
+        return drawing, self.classes[i]
