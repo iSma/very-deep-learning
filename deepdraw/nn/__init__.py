@@ -3,7 +3,29 @@ from torch.autograd import Variable
 
 
 class RuNN(object):
-    """Helper class for running training epochs on a model."""
+    """Helper class for running training epochs on a model.
+
+    Example::
+        from torch import nn
+        from torch.utils.data.sampler import SubsetRandomSampler
+
+        model = MyNeuralNetwork()
+
+        # Split dataset into training, testing, validation
+        train, test, val = [DataLoader(dataset, batchsize=100,
+                                       sampler=SubsetRandomSampler(i))
+                            for i in dataset.split([.7, .2, .1])]
+
+        # Create runner
+        runn = RuNN(model, criterion=nn.NLLLoss())
+
+        # Train for 50 epochs
+        runn.train(50, train, val)
+        # Test accuracy on test set
+        runn.test(test)
+        # Save to disk
+        runn.save('my-model.nn')
+    """
     def __init__(self, model, cuda=True, criterion=None, optimizer=None,
                  log_interval=2000):
         if criterion is None:
