@@ -1,16 +1,12 @@
 import os
 import argparse
-import numpy as np
 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import matplotlib.gridspec as gridspec
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.autograd as autograd
 from torch.autograd import Variable
 from torchvision import datasets, transforms
 
@@ -20,13 +16,15 @@ from utils import discriminator as d
 
 # Argparse
 parser = argparse.ArgumentParser()
+parser.add_argument('-p', '--path', help='Path to data directory', type=str)
 parser.add_argument('-s', '--seed_value', help='Seed value', type=int, default=1)
 parser.add_argument('-b', '--batch_size', help='Batch size', type=int, default=128)
 parser.add_argument('-lr', '--learning_rate', help ='Learning rate value', type=int, default=0.0002)
-parser.add_argument('-ep', '--train_epoch', help='Epoch train number', type=int, default=1)
+parser.add_argument('-ep', '--train_epoch', help='Epoch train number', type=int, default=100)
 args = parser.parse_args()
 
 # Training settings
+path = args.path
 seed_value = args.seed_value
 batch_size = args.batch_size
 learning_rate = args.learning_rate
@@ -41,6 +39,16 @@ torch.manual_seed(seed_value)
 if cuda:
     torch.cuda.manual_seed(seed_value)
 
+def save_generator(G):
+    save_filename = 'simple_gan_generator.pt'
+    torch.save(G, save_filename)
+    print('Saved as %s' % save_filename)
+
+def save_discriminator(D):
+    save_filename = 'simple_gan_discriminator.pt'
+    torch.save(D, save_filename)
+    print('Saved as %s' % save_filename)
+
 #######################
 # Preprocess the data #
 #######################
@@ -52,6 +60,11 @@ transform = transforms.Compose([
         mean=(0.5, 0.5, 0.5),
         std=(0.5, 0.5, 0.5))
 ])
+
+# TODO: transform
+#dataset = DrawDataset('/data/turfu/binary/', transform=Rasterizer())
+#dataset = dataset.select(['banana', 'cat', 'dog', 'apple'])
+#dataset = dataset.reduce(5000, seed=1234)
 
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data',
@@ -152,10 +165,14 @@ for epoch in range(train_epoch):
         torch.mean(torch.FloatTensor(G_losses))
     ))
 
-   # z = torch.randn(mini_batch, 100)
-   # z = Variable(z.cuda())
-   # G_result = G(z)
-   # plt.imshow(G_result[0].cpu().data.view(28, 28).numpy(),
-   #            cmap='gray')
-   # plt.title('Digit' + str((epoch + 1)))
-   # plt.savefig('result/img/digit'+ str(epoch + 1) +'.png')
+    z = torch.randn(mini_batch, 100)
+    z = Variable(z.cuda())
+    G_result = G(z)
+    plt.imshow(G_result[0].cpu().data.view(28, 28).numpy(),
+               cmap='gray')
+    plt.title('Digit' + str((epoch + 1)))
+    plt.savefig('result/img/digit'+ str(epoch + 1) +'.png')
+
+# Save the network
+save_generator(G)
+save_discriminator(D)
