@@ -1,0 +1,158 @@
+%%%%%%%%%%
+% HEADER %
+%%%%%%%%%%
+
+\documentclass[
+  10pt, 
+  a4paper,
+  oneside, 
+  % twoside, 
+  headinclude, 
+  footinclude, 
+  BCOR5mm, 
+]{scrartcl}
+
+% package
+\usepackage[francais]{babel}
+\usepackage{color}
+\usepackage{enumitem}
+
+\usepackage{minted}
+\usemintedstyle{trac}
+\definecolor{LightGray}{gray}{0.90}
+
+\usepackage[pdftex]{graphicx}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\fvset{
+  frame = lines,
+  framesep = 2mm,
+  baselinestretch = 1,
+  rulecolor = \color{LightGray},
+  fontsize = \normalsize,
+  tabsize = 3,
+}
+
+\input{template.tex}
+
+\hyphenation{Fortran hy-phen-ation}
+
+\titleformat
+  {\section}[block]
+  {\sffamily\large\normalfont}
+  {\thesection}
+  {1em}
+  {\Large\spacedlowsmallcaps}
+
+\titleformat
+  {\subsection}[block]
+  {\sffamily\normalsize\normalfont}
+  {\thesubsection}
+  {1em}
+  {}
+
+% STYLE
+
+\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}}
+\lehead{\mbox{\llap{\small\thepage\kern1em\color{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil}}
+
+\pagestyle{scrheadings}
+\setcounter{tocdepth}{3}
+
+
+% HEAD PAGE
+
+\begin{document}
+
+%\maketitle
+
+\begin{titlepage}
+  \begin{sffamily}
+  \begin{center}
+    \textsc{\LARGE Université de Fribourg} \\ [2cm]
+    \textsc{\Large VDL Report} \\ [2cm]
+
+    % Title
+    \HRule \\ [0.5cm]
+    {\huge\spacedallcaps{Outils qui marche pas du tout...} \\ [0.5cm]}
+    \HRule \\ [2cm]
+    
+    \textsc{
+    	\Large Gil \spacedallcaps{Clavien} \\
+    	\Large Gil \spacedallcaps{Clavien} \\
+    	\Large Gil \spacedallcaps{Clavien} \\
+    	\Large Gil \spacedallcaps{Clavien} \\
+    	\Large Gil \spacedallcaps{Clavien}} \\ [2cm]
+    
+    \textsc{\large \emph{Responsable} : Liwicky \spacedallcaps{Liwicky}} \\ [0.5cm]
+    \textsc{\Large 20 décembre 2017} \\    
+
+    \vfill
+
+    % Bottom of the page
+    Département d’Informatique — Departement für Informatik \\
+    Université de Fribourg — Universität Freiburg \\
+    Boulevard de Pérolles 90, 1700 Fribourg, Suisse
+  \end{center}
+  \end{sffamily}
+\end{titlepage}
+
+\newpage
+
+% CONTENT
+
+\section{Introduction}
+
+But du projet
+
+
+\section{About quickdraw-dataset}
+
+https://quickdraw.withgoogle.com/\#
+
+https://github.com/googlecreativelab/quickdraw-dataset
+
+Expliquer le truc...
+
+
+\section{Goal}
+
+Recrerer des dessins depuis une classe
+
+
+\section{Code}
+
+Présenter les choix, les NN et tout ce merdier
+
+\subsection{Premier NN}
+
+Truc
+
+\subsection{Réseau Allemand}
+
+Truc
+
+
+\section{Problems}
+
+Les problèmes qu'on a eu
+
+
+\section{Résultat}
+
+On présente les résultats et on nique des mères
+
+
+\newpage
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\begin{thebibliography}{9}
+\end{thebibliography}
+\end{document}
