@@ -199,7 +199,7 @@ class RunGAN(RuNN):
             gen_loss += loss.data[0]
 
             # print statistics
-            if i % self.log_interval == self.log_interval-1:
+            if i == 0 or i % self.log_interval == self.log_interval-1:
                 dis_loss /= self.log_interval
                 gen_loss /= self.log_interval
                 print("[{epoch:3d}, {complete:3.0f}%] "

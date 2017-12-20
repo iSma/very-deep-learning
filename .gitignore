@@ -1,4 +1,6 @@
 /data/
+/models/
+/result/
 
 
 # Created by https://www.gitignore.io/api/python

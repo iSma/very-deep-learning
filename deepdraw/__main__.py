@@ -1,11 +1,12 @@
+import os
 import argparse
-import torch
 
 from .data.loader import DrawDataset
 from .data.transform import Rasterizer
 from .nn import RunGAN
 from .nn.gan import Discriminator, Generator
 
+import torch
 from torch import nn, optim
 from torchvision import transforms
 
@@ -27,11 +28,7 @@ parser.add_argument('-lr', '--learning_rate',
 parser.add_argument('-ep', '--train_epoch',
                     help='Epoch train number', type=int, default=100)
 parser.add_argument('-c', '--draw_class',
-                    help='Drawing class', type=str, default="banana")
-parser.add_argument('-o', '--output',
-                    help='Where to save trained model', type=str)
-parser.add_argument('-i', '--input',
-                    help='File to load model from', type=str)
+                    help='Drawing class', type=str, default="apple")
 parser.add_argument('-r', '--reduce',
                     help='Dataset reduction size', type=int, default=10000)
 
@@ -47,8 +44,12 @@ torch.manual_seed(args.seed_value)
 if cuda:
     torch.cuda.manual_seed(args.seed_value)
 
-if args.input:
-    runner = RunGAN.load(args.input)
+model_path = "models/" + args.draw_class
+result_path = "result/" + args.draw_class
+os.makedirs("models", exist_ok=True)
+os.makedirs(result_path, exist_ok=True)
+if os.path.isfile(model_path):
+    runner = RunGAN.load(model_path)
 else:
     gen = Generator()
     dis = Discriminator()
@@ -89,8 +90,7 @@ for _ in range(args.train_epoch):
     img = runner.test()
     plt.imshow(img, cmap='gray')
     plt.title("Epoch {}".format(runner.epoch + 1))
-    plt.savefig("result/{}.png".format(runner.epoch + 1))
+    plt.savefig("{}/{}.png".format(result_path, runner.epoch + 1))
 
     runner.epoch += 1
-    if args.output:
-        runner.save(args.output)
+    runner.save(model_path)
