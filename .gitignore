@@ -133,3 +133,4 @@ venv.bak/
 *.mtc1
 *.out
 *.synctex.gz
+report/_minted-rapport
