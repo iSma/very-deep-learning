@@ -74,19 +74,19 @@
   \begin{sffamily}
   \begin{center}
     \textsc{\LARGE Université de Fribourg} \\ [2cm]
-    \textsc{\Large VDL Report} \\ [2cm]
+    \textsc{\Large Very Deep Learning} \\ [2cm]
 
     % Title
     \HRule \\ [0.5cm]
-    {\huge\spacedallcaps{Outils qui marche pas du tout...} \\ [0.5cm]}
+    {\huge\spacedallcaps{Deepdraw} \\ [0.5cm]}
     \HRule \\ [2cm]
     
     \textsc{
+    	\Large Ismaïl \spacedallcaps{Senhaji}, 
     	\Large Gil \spacedallcaps{Clavien} \\
-    	\Large Gil \spacedallcaps{Clavien} \\
-    	\Large Gil \spacedallcaps{Clavien} \\
-    	\Large Gil \spacedallcaps{Clavien} \\
-    	\Large Gil \spacedallcaps{Clavien}} \\ [2cm]
+    	\Large Noé \spacedallcaps{Zufferey}, 
+    	\Large Michaël \spacedallcaps{Diatta} \\
+    	\Large Igor \spacedallcaps{Dundic}} \\ [2cm]
     
     \textsc{\large \emph{Responsable} : Liwicky \spacedallcaps{Liwicky}} \\ [0.5cm]
     \textsc{\Large 20 décembre 2017} \\    
@@ -107,44 +107,61 @@
 
 \section{Introduction}
 
-But du projet
-
+For the very deep learning project, we decided to build, train and manage a neural network that can draw pictures of simple concept. We use the Quick Draw Dataset, a google's game, that provide a huge dataset of labelised simple drawing.
 
 \section{About quickdraw-dataset}
 
-https://quickdraw.withgoogle.com/\#
+The Quick Draw Dataset\footnote{\url{https://github.com/googlecreativelab/quickdraw-dataset}} is a collection of 50 million drawings across 345 categories, contributed by players of the game Quick, Draw!\footnote{\url{https://quickdraw.withgoogle.com/\#}}. The drawings were captured as timestamped vectors, tagged with metadata including what the player was asked to draw and in which country the player was located.
 
-https://github.com/googlecreativelab/quickdraw-dataset
+The Quick Draw game principle is to draw specific picture given by the computer. This one try to recognize, with machine learning, your drawing.
 
-Expliquer le truc...
+\begin{figure}[h]
+	\center
+	\includegraphics[width=\columnwidth]{qdd-example.jpg}
+	\caption{Quick Draw example.}
+	\label{promo-asylamba}
+\end{figure}
+
+The Quick Draw Dataset provides preprocessed dataset. We choose to use the \textbf{Simplified Drawing files} preprocessed dataset. They've simplified the vectors, removed the timing information, and positioned and scaled the data into a 256x256 region. The data is exported in ndjson format with the same metadata as the raw format. We use a binary version of this format, for efficiency purpose.
 
 
-\section{Goal}
+\section{Deepdraw code}
 
-Recrerer des dessins depuis une classe
+The final goal of this project is to reverse the principle given in the previous section: with give a class (a number) to the computer and this one try to draw the corresponding drawing.
 
 
 \section{Code}
 
 Présenter les choix, les NN et tout ce merdier
 
-\subsection{Premier NN}
+\subsection{Get the data}
 
-Truc
+Isma présente son petit merdier (il est tout fier)
 
-\subsection{Réseau Allemand}
+\subsection{First NN: GAN}
 
-Truc
+Générateur...
+
+\subsection{Second NN: DCGAN}
+
+Discriminative...
 
 
 \section{Problems}
 
-Les problèmes qu'on a eu
+Les problèmes qu'on a eu, outre les problèmes de natel de Mick...
 
 
 \section{Résultat}
 
-On présente les résultats et on nique des mères
+On présente les résultats et on nique des mères... histoire de fêter ça...
+
+
+\section{Further work}
+
+Warsserstein
+
+WaffenSS
 
 
 \newpage
