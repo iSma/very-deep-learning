@@ -107,3 +107,29 @@ venv.bak/
 .mypy_cache/
 
 # End of https://www.gitignore.io/api/python
+
+
+# LaTeX
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
