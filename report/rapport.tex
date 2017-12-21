@@ -127,7 +127,7 @@ The Quick Draw Dataset provides preprocessed dataset. We choose to use the \text
 
 \section{Goals}
 
-The final goal of this project is to reverse the principle given in the previous section: with give a class (a number) to the computer and this one try to draw the corresponding drawing.
+The final goal of this project is to reverse the principle given in the previous section: with give a class to the computer and this one try to draw the corresponding drawing.
 
 
 \section{Deepdraw code}
@@ -159,8 +159,14 @@ used, however.
 
 \subsection{First NN: GAN}
 
-Générateur...
+Generative aversarial networks called GANs belong to the familly of generative models. Which we can define as a familly of model that takes a dataset containing samples from a distribution $p_data$ and learns in someway to represents this distribution $p_model$. In this project we will judge the quality of this representation by generating some samples of $p_model$.
 
+We choose to focus our work on generative models and GANs in particular because it's an interesting way to test our capacity to represent and play with the probability distribution of drawing ability of humans. The question is: can a model draw realistic samples of an object (an apple for example) as a human can do it, considering the high variability of the samples.
+
+GANs can represent the samples distribution by using a Maximum likelihood estimation, this means that we choose some parameters for our model that maximize the likelihood of the training data, in a log space, because of numerical issues correlated to computers design.
+
+\subsubsection{GAN framework}
+The framework is made of two parts. There is on generator that creates samples that belongs to $p_model$ but which should come from the same distribution as the training set $p_data$. The other part consist of a discriminator 
 \subsection{Second NN: DCGAN}
 
 Discriminative...
