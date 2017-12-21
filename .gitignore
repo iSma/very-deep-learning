@@ -1,6 +1,10 @@
 /data/
 /models/
+/models-gan/
+/models-dcgan/
 /result/
+/result-gan/
+/result-dcgan/
 
 
 # Created by https://www.gitignore.io/api/python

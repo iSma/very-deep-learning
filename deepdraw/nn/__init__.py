@@ -215,3 +215,98 @@ class RunGAN(RuNN):
         z = Variable(next(self.to_cuda(z)))
         output = self.gen(z)
         return output[0].cpu().data.view(28, 28).numpy()
+
+
+class RunDCGAN(RuNN):
+    def __init__(self, dis, dis_optim, gen, gen_optim,
+                 cuda=True, criterion=None, log_interval=2000):
+        self.dis_optim = dis_optim
+        self.gen_optim = gen_optim
+
+        if criterion is None:
+            criterion = torch.nn.CrossEntropyLoss()
+
+        self.criterion = criterion
+        self.log_interval = log_interval
+
+        self.cuda = cuda and torch.cuda.is_available()
+        if self.cuda:
+            self.dis = dis.cuda()
+            self.gen = gen.cuda()
+        else:
+            self.dis = dis.cpu()
+            self.gen = gen.cpu()
+
+        self.epoch = 0
+
+    def train(self, epochs, train, val):
+        """Trains model, for `epoch` epochs,
+        testing accuracy on validation set after each one."""
+        # TODO: collect and return accuracy values as list
+        for _ in range(epochs):
+            print("Epoch {epoch}".format(epoch=self.epoch+1))
+            self.train_epoch(train)
+            self.epoch += 1
+
+    def train_epoch(self, data):
+        """Runs one training epoch."""
+        dis_loss = 0.0
+        gen_loss = 0.0
+        total = len(data)
+        for i, data in enumerate(data):
+            inputs, labels = data
+            size = labels.size()[0]
+            # inputs = inputs.view(-1, 64 * 64)
+            y_real, y_fake = torch.ones(size), torch.zeros(size)
+
+            inputs, y_real, y_fake = (Variable(v) for v in
+                                      self.to_cuda(inputs, y_real, y_fake))
+
+            # Train Discriminator
+            self.dis.zero_grad()
+            outputs = self.dis(inputs).squeeze()
+            loss = self.criterion(outputs, y_real)
+
+            z = torch.randn(size, 100).view(-1, 100, 1, 1)
+            z = Variable(next(self.to_cuda(z)))
+            outputs = self.gen(z)
+
+            outputs = self.dis(outputs).squeeze()
+            loss += self.criterion(outputs, y_fake)
+
+            loss.backward()
+            self.dis_optim.step()
+
+            dis_loss += loss.data[0]
+
+            # Train Generator
+            self.gen.zero_grad()
+
+            z = torch.randn(size, 100).view(-1, 100, 1, 1)
+            z = Variable(next(self.to_cuda(z)))
+
+            outputs = self.gen(z)
+            outputs = self.dis(outputs).squeeze()
+            loss = self.criterion(outputs, y_real)
+            loss.backward()
+            self.gen_optim.step()
+
+            gen_loss += loss.data[0]
+
+            # print statistics
+            if i == 0 or i % self.log_interval == self.log_interval-1:
+                dis_loss /= self.log_interval
+                gen_loss /= self.log_interval
+                print("[{epoch:3d}, {complete:3.0f}%] "
+                      "Dis/Gen loss: {dis_loss:.4f} {gen_loss:.4f}"
+                      .format(epoch=self.epoch+1, complete=100*i/total,
+                              dis_loss=dis_loss, gen_loss=gen_loss))
+
+                dis_loss = 0.0
+                gen_loss = 0.0
+
+    def test(self):
+        z = torch.randn(1, 100).view(-1, 100, 1, 1)
+        z = Variable(next(self.to_cuda(z)), volatile=True)
+        output = self.gen(z)
+        return output[0].cpu().data.view(64, 64).numpy()
