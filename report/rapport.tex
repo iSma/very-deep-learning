@@ -166,10 +166,30 @@ We choose to focus our work on generative models and GANs in particular because 
 GANs can represent the samples distribution by using a Maximum likelihood estimation, this means that we choose some parameters for our model that maximize the likelihood of the training data, in a log space, because of numerical issues correlated to computers design.
 
 \subsubsection{GAN framework}
-The framework is made of two parts. There is on generator that creates samples that belongs to $p_model$ but which should come from the same distribution as the training set $p_data$. The other part consist of a discriminator 
+The framework is made of two parts. There is on generator that creates samples that belongs to $p_model$ but which should come from the same distribution as the training set $p_data$. The other part consist of a discriminator.
+
+\begin{figure}[!h]
+  \makebox[\textwidth][c]{
+    \subfloat[Epoch 55.]{\includegraphics[width=.45\columnwidth]{apple-sample-57}}\quad
+    \subfloat[Epoch 75.]{\includegraphics[width=.45\columnwidth]{apple-sample-75}}\quad
+    \subfloat[Epoch 115.]{\includegraphics[width=.45\columnwidth]{apple-sample-115}}
+  }
+  \caption{Légende TODO}
+  \label{s1-anaylse-v2}
+\end{figure}
+
 \subsection{Second NN: DCGAN}
 
 Discriminative...
+
+\begin{figure}[!h]
+  \makebox[\textwidth][c]{
+    \subfloat[Epoch 9.]{\includegraphics[width=.90\columnwidth]{apple-dc-sample-9}}\quad
+    \subfloat[Epoch 21.]{\includegraphics[width=.90\columnwidth]{apple-dc-sample-21}}\quad
+  }
+  \caption{Légende TODO}
+  \label{s1-anaylse-v2}
+\end{figure}
 
 
 \section{Problems}
