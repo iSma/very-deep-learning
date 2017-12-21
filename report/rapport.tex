@@ -136,7 +136,26 @@ Présenter les choix, les NN et tout ce merdier
 
 \subsection{Get the data}
 
-Isma présente son petit merdier (il est tout fier)
+The size of the dataset presented an interesting challenge: at 7.1GB in the
+packed binary format, and even more once parsed into Python data types, it
+barely fits into memory. To solve this, we build an index file containing each
+drawing's id, class (and by extension the file where it can be found), and its
+offset within the file. The size of the resulting \texttt{index.csv} file is
+1.6GB, small enough to be loaded into memory in a reasonable time.
+
+Drawings are provided as a sequence of strokes, where each stroke is a sequence
+of $(x, y)$ coordinates. This format isn't particularly suited for a Neural
+Network, thus the need to transform them. We implemented a \texttt{Rasterizer}
+class, responsible for converting such a sequence of strokes to a 256 by 256
+rasterized image, using Bresenham's line
+algorithm\footnote{\url{https://en.wikipedia.org/wiki/Bresenham\%27s_line_algorithm}}.
+This class is compatible with Torch's transormation framework and can be used in
+conjunction with other transformations, such as resizing or normalizing the image.
+
+Another transormation class was implemented, \texttt{Sequencer}, which converts
+the drawing into a sequence of state vectors, for use in a Recurrent Neural
+Network\footnote{\url{https://arxiv.org/abs/1704.03477}}. This approach wasn't
+used, however.
 
 \subsection{First NN: GAN}
 
